@@ -7,7 +7,7 @@ license.workspace = true
 repository.workspace = true
 rust-version.workspace = true
 
-include = "../../../template/"
+include = "../../template/"]
 
 [[bin]]
 name = "cargo-boots"
