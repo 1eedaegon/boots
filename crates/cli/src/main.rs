@@ -1,4 +1,5 @@
 use anyhow::Result;
+use boots_core::{adder::add, generator::generate};
 use clap::{Parser, Subcommand, command};
 
 #[derive(Parser)]
@@ -29,15 +30,8 @@ struct BootsCli {
 
 #[derive(Subcommand)]
 enum BootsCommands {
-    Generate {
-        #[arg(long)]
-        git: Option<String>,
-
-        name: Option<String>,
-    },
-    Add {
-        target: String,
-    },
+    Generate { name: Option<String> },
+    Add { target: String },
 }
 
 fn main() -> Result<()> {
@@ -56,13 +50,12 @@ fn main() -> Result<()> {
     };
 
     match command {
-        BootsCommands::Generate { git, name } => {
-            println!("Generate command: git={:?}, name={:?}", git, name);
-            // TODO: 구현
+        BootsCommands::Generate { name } => {
+            println!("Generate command: name={:?}", name);
+            generate(name)?;
         }
         BootsCommands::Add { target } => {
-            println!("Add command: target={}", target);
-            // TODO
+            add(&target)?;
         }
     }
 

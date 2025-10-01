@@ -1,0 +1,15 @@
+[template]
+include = ["template/"]
+exclude = [
+    "crates/cli",
+    "crates/core",
+    "target",
+    ".git",
+    ".github",
+    "Cargo.toml",
+    "Cargo.lock",
+    "benches",
+    "LICENSE",
+    "README.md",
+    "cargo-generate.toml"
+]
