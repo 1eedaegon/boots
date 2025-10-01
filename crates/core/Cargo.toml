@@ -1,0 +1,12 @@
+[package]
+name = "boots-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+handlebars = "6.3.2"
+serde = { workspace = true, features = ["derive"] }
+toml_edit.workspace = true

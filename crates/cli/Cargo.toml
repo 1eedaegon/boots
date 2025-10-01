@@ -1,0 +1,22 @@
+[package]
+name = "boots-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "cargo-boots"
+path = "src/main.rs"
+
+[[bin]]
+name = "boots"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+boots-core = { path = "../core" }
+clap.workspace = true
+dialoguer = "0.12.0"
