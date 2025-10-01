@@ -7,6 +7,8 @@ license.workspace = true
 repository.workspace = true
 rust-version.workspace = true
 
+include = "../../template/**/*"
+
 [[bin]]
 name = "cargo-boots"
 path = "src/main.rs"
