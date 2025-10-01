@@ -6,10 +6,15 @@ on:
       - "*"
   pull_request:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test --all-features
+      - name: Run tests
+        run: cargo test --all-features
