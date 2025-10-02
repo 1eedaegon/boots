@@ -6,13 +6,13 @@ members = ["crates/core","crates/cli"]
 version = "0.1.0"
 edition = "2024"
 authors = ["1eedaegon"]
-description = "Rust template generator for modular architectures"
+description = "Rust template generator for modular architectures(monorepo)"
 license = "MIT"
 repository = "https://github.com/1eedaegon/boots"
 homepage = "https://github.com/1eedaegon/boots"
 documentation = "https://github.com/1eedaegon/boots"
 readme = "README.md"
-keywords = ["template", "generator", "cargo", "scaffold", "modular", "architecture", "monorepo"]
+keywords = ["template", "generator", "cargo", "modular-architecture", "monorepo"]
 categories = ["development-tools"]
 rust-version = "1.90"
 
