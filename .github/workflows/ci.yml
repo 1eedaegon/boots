@@ -68,7 +68,7 @@ jobs:
           key: ${{ matrix.target }}
 
       - name: Install cross-compilation tools (Linux ARM)
-        if: matrix.cross
+        if: matrix.cross == true
         run: |
           sudo apt-get update
           sudo apt-get install -y gcc-aarch64-linux-gnu
@@ -79,7 +79,7 @@ jobs:
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
         env:
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: ${{ matrix.cross == true && 'aarch64-linux-gnu-gcc' || '' }}
 
       - name: Package binary (Unix)
         if: runner.os != 'Windows'
