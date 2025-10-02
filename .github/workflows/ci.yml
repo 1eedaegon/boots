@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   push:
@@ -38,9 +38,9 @@ jobs:
   # 3. Build matrix (실패해도 계속 진행)
   build:
     needs: [lint, test]
-    continue-on-error: true # 실패해도 다른 job 계속 실행
+    continue-on-error: true
     strategy:
-      fail-fast: false # 하나 실패해도 나머지 계속
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -106,8 +106,8 @@ jobs:
             boots-${{ matrix.name }}.*
           retention-days: 7
 
-  # 4. crates.io Release (main 브랜치만)
-  publish-crates:
+  # 4. crates.io Release + GitHub Release (main 브랜치만)
+  release:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -119,44 +119,44 @@ jobs:
         with:
           fetch-depth: 0
       - uses: dtolnay/rust-toolchain@stable
-      - name: Run release-plz
-        uses: MarcoIeni/release-plz-action@v0.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-  # 5. GitHub Release (성공한 바이너리만 업로드)
-  github-release:
-    needs: build
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-
+      # Download artifacts from build job
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
+      # Prepare binaries
       - name: Prepare release files
         run: |
           mkdir -p release
           find artifacts -name 'boots-*' -type f -exec cp {} release/ \;
           ls -lah release/
 
+      # Create checksums
       - name: Create checksums
         run: |
           cd release
           shasum -a 256 boots-*.tar.gz boots-*.zip > checksums.txt || true
           cat checksums.txt
 
-      - name: Upload to GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: release/*
-          generate_release_notes: true
-          fail_on_unmatched_files: false # 파일 없어도 실패 안 함
+      # Run release-plz (creates tag and release)
+      - name: Run release-plz
+        id: release-plz
+        uses: MarcoIeni/release-plz-action@v0.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      # Upload binaries to the release created by release-plz
+      - name: Upload binaries to release
+        if: steps.release-plz.outputs.releases_created == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the latest release tag
+          TAG=$(git describe --tags --abbrev=0)
+          echo "Uploading to release $TAG"
+
+          # Upload all files in release/ directory
+          gh release upload "$TAG" release/* --clobber
