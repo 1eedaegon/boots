@@ -1,5 +1,5 @@
 [package]
-name = "boots-cli"
+name = "boots"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
@@ -11,8 +11,9 @@ documentation.workspace = true
 keywords.workspace = true
 categories.workspace = true
 rust-version.workspace = true
+readme = "../../README.md"
 
-include = ["../../template/**/*"]
+include = ["src/**/*", "Cargo.toml"]
 
 [[bin]]
 name = "cargo-boots"

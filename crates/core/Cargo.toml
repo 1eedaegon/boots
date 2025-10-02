@@ -11,9 +11,9 @@ documentation.workspace = true
 keywords.workspace = true
 categories.workspace = true
 rust-version.workspace = true
+readme = "../../README.md"
 include = [
     "src/**/*",
-    "../../template/**/*",
 ]
 
 [dependencies]
