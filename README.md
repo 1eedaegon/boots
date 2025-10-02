@@ -9,19 +9,35 @@ Rust template generator for building modular architectures
 
 ## Installation
 
-### From crates.io
+### Use Cargo
 
 ```bash
 cargo install boots
 ```
 
-### From GitHub Releases
+### Use Pre-built Binaries
 
 Download pre-built binaries for your platform from [Releases](https://github.com/1eedaegon/boots/releases):
 
-- Linux (x86_64)
-- macOS (Apple Silicon)
-- Windows (x86_64)
+#### Linux & Unix(MacOS) e.g., linux-x64
+```bash
+curl -LO https://github.com/1eedaegon/boots/releases/latest/download/boots-linux-x64.tar.gz
+tar xzf boots-linux-x64.tar.gz
+sudo mv boots cargo-boots /usr/local/bin/
+```
+
+#### Windows(PowerShell) e.g., windows-x64
+```powershell
+# Download
+Invoke-WebRequest -Uri "https://github.com/1eedaegon/boots/releases/latest/download/boots-windows-x64.zip" -OutFile "boots.zip"
+
+# Extract
+Expand-Archive -Path boots.zip -DestinationPath .
+
+# Move to PATH (adjust path as needed)
+Move-Item boots.exe,cargo-boots.exe "$env:USERPROFILE\.cargo\bin\"
+```
+
 
 ## Usage
 
@@ -65,7 +81,7 @@ sample-project/
 
 ## Examples
 
-### Create a new CLI tool
+### Create & Run a new CLI tool
 
 ```bash
 boots generate my-cli-tool
