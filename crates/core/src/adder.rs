@@ -1,11 +1,30 @@
 use std::{
     fs::{self, create_dir_all, read_to_string, write},
-    path::Path,
+    path::{Path, PathBuf},
 };
 
 use toml_edit::{ArrayOfTables, DocumentMut, Item, Table, value};
 
 use crate::{BootsError, Result};
+
+// cargo-generate uses cargo home cache
+fn get_template_path() -> Result<PathBuf> {
+    let home = std::env::var("CARGO_HOME")
+        .or_else(|_| std::env::var("HOME").map(|h| format!("{}/.cargo", h)))
+        .map_err(|_| BootsError::Other("Cannot find home directory".to_string()))?;
+
+    let cache_dir = PathBuf::from(home)
+        .join("cargo-generate")
+        .join("boots-template");
+
+    if !cache_dir.exists() {
+        return Err(BootsError::Other(
+            "Template not found. Run 'boots generate' first to download template.".to_string(),
+        ));
+    }
+
+    Ok(cache_dir)
+}
 
 pub fn add(target: &str) -> Result<()> {
     match target {
@@ -24,7 +43,10 @@ fn add_github_test() -> Result<()> {
     if Path::new(workflow_path).exists() {
         return Err(BootsError::AlreadyExists(workflow_path.to_string()));
     }
-    let content = include_str!("../../../template/.github/workflows/test.yml");
+
+    let template_path = get_template_path()?;
+    let content = read_to_string(template_path.join(".github/workflows/test.yml"))?;
+
     create_dir_all(".github/workflows")?;
     write(workflow_path, content)?;
     Ok(())
@@ -35,7 +57,10 @@ fn add_github_build() -> Result<()> {
     if Path::new(workflow_path).exists() {
         return Err(BootsError::AlreadyExists(workflow_path.to_string()));
     }
-    let content = include_str!("../../../template/.github/workflows/build.yml");
+
+    let template_path = get_template_path()?;
+    let content = read_to_string(template_path.join(".github/workflows/build.yml"))?;
+
     create_dir_all(".github/workflows")?;
     write(workflow_path, content)?;
     Ok(())
@@ -46,9 +71,12 @@ fn add_github_semver() -> Result<()> {
     if Path::new(workflow_path).exists() {
         return Err(BootsError::AlreadyExists(workflow_path.to_string()));
     }
-    let workflow_content = include_str!("../../../template/.github/workflows/semver.yml");
+
+    let template_path = get_template_path()?;
+    let content = read_to_string(template_path.join(".github/workflows/semver.yml"))?;
+
     create_dir_all(".github/workflows")?;
-    write(workflow_path, workflow_content)?;
+    write(workflow_path, content)?;
     Ok(())
 }
 
@@ -60,11 +88,10 @@ fn add_test_perf() -> Result<()> {
         return Err(BootsError::AlreadyExists(bench_file.to_string()));
     }
 
-    // Cargo.toml 수정
     add_criterion_to_cargo()?;
 
-    // 벤치마크 파일 생성
-    let bench_content = include_str!("../../../template/benches/benchmark.rs");
+    let template_path = get_template_path()?;
+    let bench_content = read_to_string(template_path.join("benches/benchmark.rs"))?;
 
     create_dir_all(bench_dir)?;
     write(bench_file, bench_content)?;

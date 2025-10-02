@@ -51,7 +51,6 @@ fn main() -> Result<()> {
 
     match command {
         BootsCommands::Generate { name } => {
-            println!("Generate command: name={:?}", name);
             generate(name)?;
         }
         BootsCommands::Add { target } => {
