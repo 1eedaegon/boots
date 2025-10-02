@@ -18,6 +18,6 @@ include = [
 
 [dependencies]
 anyhow.workspace = true
-cargo-generate = { version = "0.21", default-features = false }
+cargo-generate = { version = "0.21", default-features = false, features = ["vendored-openssl"] }
 dialoguer = "0.12.0"
 toml_edit.workspace = true
