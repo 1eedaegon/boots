@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4](https://github.com/1eedaegon/boots/compare/boots-core-v0.1.3...boots-core-v0.1.4) - 2025-10-02
+
+### Fixed
+
+- update for openssl and platform build
+
+### Other
+
+- Merge branch 'main' into release-plz-2025-10-02T18-43-12Z
+- release v0.1.3
+
 ## [0.1.3](https://github.com/1eedaegon/boots/compare/boots-core-v0.1.2...boots-core-v0.1.3) - 2025-10-02
 
 ### Fixed

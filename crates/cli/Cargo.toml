@@ -25,6 +25,6 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow.workspace = true
-boots-core = { version = "0.1.3", path = "../core" }
+boots-core = { version = "0.1.4", path = "../core" }
 clap.workspace = true
 dialoguer = "0.12.0"
