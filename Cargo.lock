@@ -139,7 +139,7 @@ dependencies = [
 
 [[package]]
 name = "boots"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "boots-core",
@@ -149,7 +149,7 @@ dependencies = [
 
 [[package]]
 name = "boots-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "cargo-generate",
