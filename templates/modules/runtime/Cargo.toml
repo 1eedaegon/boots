@@ -1,0 +1,13 @@
+[package]
+name = "{{project_name}}-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+{{project_name}}-api = { path = "../api" }
+anyhow.workspace = true
+axum = "0.7"
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true

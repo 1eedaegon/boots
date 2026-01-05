@@ -1,0 +1,18 @@
+[package]
+name = "{{project_name}}-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "{{project_name}}"
+path = "src/main.rs"
+
+[dependencies]
+{{project_name}}-core = { path = "../core" }
+{{project_name}}-runtime = { path = "../runtime" }
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
