@@ -1,6 +1,6 @@
 # Boots
 
-Rust template generator for building modular architectures
+Rust template generator for building modular architectures (monorepo)
 
 [![Crates.io](https://img.shields.io/crates/v/boots.svg)](https://crates.io/crates/boots)
 [![Test](https://github.com/1eedaegon/boots/workflows/Test/badge.svg)](https://github.com/1eedaegon/boots/actions)
@@ -9,99 +9,206 @@ Rust template generator for building modular architectures
 
 ## Installation
 
-### Use Cargo
+### Using Cargo
 
 ```bash
 cargo install boots
 ```
 
-### Use Pre-built Binaries
+### Using Pre-built Binaries
 
 Download pre-built binaries for your platform from [Releases](https://github.com/1eedaegon/boots/releases):
 
-#### Linux & Unix(MacOS) e.g., linux-x64
+#### Linux & macOS
+
 ```bash
+# Linux x64
 curl -LO https://github.com/1eedaegon/boots/releases/latest/download/boots-linux-x64.tar.gz
 tar xzf boots-linux-x64.tar.gz
 sudo mv boots cargo-boots /usr/local/bin/
+
+# macOS ARM64 (Apple Silicon)
+curl -LO https://github.com/1eedaegon/boots/releases/latest/download/boots-darwin-arm64.tar.gz
+tar xzf boots-darwin-arm64.tar.gz
+sudo mv boots cargo-boots /usr/local/bin/
 ```
 
-#### Windows(PowerShell) e.g., windows-x64
+#### Windows (PowerShell)
+
 ```powershell
-# Download
 Invoke-WebRequest -Uri "https://github.com/1eedaegon/boots/releases/latest/download/boots-windows-x64.zip" -OutFile "boots.zip"
-
-# Extract
 Expand-Archive -Path boots.zip -DestinationPath .
-
-# Move to PATH (adjust path as needed)
 Move-Item boots.exe,cargo-boots.exe "$env:USERPROFILE\.cargo\bin\"
 ```
 
-
 ## Usage
 
-### Generate a new project
+### Service Project (Full-stack)
+
+Create a service with API, runtime server, CLI, and core modules:
 
 ```bash
-# Interactive mode (prompts for project name)
-boots generate
+# Basic service
+boots service my-api
 
-# With project name
-boots generate sample-project
+# With PostgreSQL support
+boots service my-api --options postgres
+
+# With PostgreSQL and gRPC
+boots service my-api --options postgres,grpc
+
+# With all options
+boots service my-api --options postgres,grpc,http
 
 # Using cargo subcommand
-cargo boots generate sample-project
+cargo boots service my-api --options postgres
 ```
 
-### Add components to existing project
+### CLI Project
+
+Create a CLI application with core and optional modules:
 
 ```bash
-# Add GitHub Actions workflow
-boots add gh:test      # Test workflow
-boots add gh:build     # Build workflow
-boots add gh:semver    # Release workflow
+# Basic CLI
+boots cli my-tool
 
-# Add performance benchmarks
-boots add test:perf
+# With HTTP client
+boots cli my-tool --options client
+
+# With client and persistence
+boots cli my-tool --options client,persistence
 ```
 
-## Generated Project Structure
+### Library Project
+
+Create a minimal library with examples:
+
+```bash
+boots lib my-crate
+```
+
+## Generated Project Structures
+
+### Service Project
 
 ```
-sample-project/
-├── .github/
-│   └── workflows/      # CI/CD configurations
+my-api/
 ├── crates/
-│   ├── core/          # Core library
-│   └── cli/           # CLI application
+│   ├── api/           # HTTP/gRPC handlers and routes
+│   ├── cli/           # Command-line interface
+│   ├── core/          # Business logic and domain types
+│   └── runtime/       # Server startup and configuration
+├── .github/
+│   └── workflows/     # CI/CD (build, test, release)
 ├── Cargo.toml         # Workspace configuration
+├── Dockerfile
+├── Makefile
 └── README.md
 ```
 
+**Runtime Features:**
+- Health endpoint: `GET /health` returns `{"healthy": true}`
+- Metrics endpoint: `GET /metrics` returns Prometheus format
+
+### CLI Project
+
+```
+my-tool/
+├── crates/
+│   ├── cli/           # Command-line interface
+│   ├── client/        # HTTP client (with --options client)
+│   └── core/          # Business logic
+├── Cargo.toml
+├── Dockerfile
+├── Makefile
+└── README.md
+```
+
+### Library Project
+
+```
+my-crate/
+├── crates/
+│   └── core/
+│       ├── src/
+│       └── examples/  # Example usage
+├── Cargo.toml
+├── Dockerfile
+├── Makefile
+└── README.md
+```
+
+## Options Reference
+
+### Service Options
+
+| Option | Description |
+|--------|-------------|
+| `postgres` | Add PostgreSQL support with sqlx and migrations |
+| `sqlite` | Add SQLite support |
+| `grpc` | Add gRPC support with tonic and proto directory |
+| `http` | HTTP API (enabled by default) |
+
+### CLI Options
+
+| Option | Description |
+|--------|-------------|
+| `client` | Add HTTP client module with reqwest |
+| `persistence` | Add local file-based persistence |
+
 ## Examples
 
-### Create & Run a new CLI tool
+### Create and Run a Service
 
 ```bash
-boots generate my-cli-tool
-cd my-cli-tool
-cargo run --bin my-cli-tool
+boots service my-api --options postgres,grpc
+cd my-api
+cargo build --all
+cargo run -p my-api-cli -- --port 8080
 ```
 
-### Create a library with CLI
+Test the endpoints:
+```bash
+curl http://localhost:8080/health
+# {"healthy":true}
+
+curl http://localhost:8080/metrics
+# # HELP up Server is up
+# up 1
+```
+
+### Create and Run a CLI Tool
 
 ```bash
-boots generate my-library
-cd my-library
-
-# Work on the library
-cargo build -p my-library-core
-
-# Work on the CLI
-cargo run -p my-library-cli
+boots cli my-tool --options client
+cd my-tool
+cargo run -p my-tool-cli -- --help
 ```
 
+### Create a Library
+
+```bash
+boots lib my-crate
+cd my-crate
+cargo build
+cargo run --example basic
+```
+
+## Development
+
+```bash
+# Build
+cargo build --all
+
+# Test
+cargo test --all
+
+# Lint
+cargo clippy --all -- -D warnings
+
+# Format
+cargo fmt --all
+```
 
 ## Contributing
 
@@ -110,8 +217,3 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with [cargo-generate](https://github.com/cargo-generate/cargo-generate)
-- Inspired by other project structures
