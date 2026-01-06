@@ -1,27 +1,21 @@
-use std::fmt;
+use thiserror::Error;
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum BootsError {
-    AlreadyExists(String),
-    IoError(std::io::Error),
-    TemplateError(String),
-    Other(String),
+    #[error("Invalid project type: {0}")]
+    InvalidProjectType(String),
+
+    #[error("Invalid option: {0}")]
+    InvalidOption(String),
+
+    #[error("IO error: {0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("Template error: {0}")]
+    Template(String),
+
+    #[error("Directory already exists: {0}")]
+    DirectoryExists(String),
 }
 
-impl fmt::Display for BootsError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            BootsError::AlreadyExists(path) => write!(f, "Already exists: {}", path),
-            BootsError::IoError(err) => write!(f, "IO error: {}", err),
-            BootsError::TemplateError(err) => write!(f, "Template error: {}", err),
-            BootsError::Other(err) => write!(f, "{}", err),
-        }
-    }
-}
-impl std::error::Error for BootsError {}
-
-impl From<std::io::Error> for BootsError {
-    fn from(err: std::io::Error) -> Self {
-        BootsError::IoError(err)
-    }
-}
+pub type Result<T> = std::result::Result<T, BootsError>;
