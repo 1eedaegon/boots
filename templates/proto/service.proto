@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package {{project_name_snake}};
+
+service {{project_name_pascal}}Service {
+    rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+    bool healthy = 1;
+    string version = 2;
+}
