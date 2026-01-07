@@ -50,9 +50,6 @@ jobs:
             target: aarch64-unknown-linux-gnu
             name: linux-arm64
             cross: true
-          - os: macos-13 # Intel runner
-            target: x86_64-apple-darwin
-            name: macos-x64
           - os: macos-latest # Apple Silicon runner
             target: aarch64-apple-darwin
             name: macos-arm64
