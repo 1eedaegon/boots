@@ -1,6 +1,6 @@
 # Boots
 
-Rust template generator for building modular architectures (monorepo)
+Bootstrap a Rust template generator for building modular architectures (monorepo)
 
 [![Crates.io](https://img.shields.io/crates/v/boots.svg)](https://crates.io/crates/boots)
 [![Test](https://github.com/1eedaegon/boots/workflows/Test/badge.svg)](https://github.com/1eedaegon/boots/actions)
