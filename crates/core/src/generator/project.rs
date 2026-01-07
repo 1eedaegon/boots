@@ -136,10 +136,7 @@ impl ProjectGenerator {
             let mut engine = TemplateEngine::new();
             engine.set("project_name", &self.config.name);
             engine.set("project_name_snake", &self.config.name.replace('-', "_"));
-            engine.set(
-                "project_name_pascal",
-                &to_pascal_case(&self.config.name),
-            );
+            engine.set("project_name_pascal", &to_pascal_case(&self.config.name));
 
             let content = engine.render(&template);
             fs::write(proto_dir.join("service.proto"), content)?;
@@ -177,13 +174,12 @@ impl ProjectGenerator {
     fn create_module_cargo(&self, path: &Path, module: &Module) -> Result<()> {
         let module_name_str = module_name(module);
 
-        let template_path = if *module == Module::Cli
-            && self.config.project_type == ProjectType::Service
-        {
-            "modules/cli/Cargo_service.toml".to_string()
-        } else {
-            format!("modules/{}/Cargo.toml", module_name_str)
-        };
+        let template_path =
+            if *module == Module::Cli && self.config.project_type == ProjectType::Service {
+                "modules/cli/Cargo_service.toml".to_string()
+            } else {
+                format!("modules/{}/Cargo.toml", module_name_str)
+            };
 
         if let Some(template) = Templates::get_template(&template_path) {
             let mut engine = TemplateEngine::new();
@@ -204,8 +200,11 @@ impl ProjectGenerator {
             }
 
             if *module == Module::Api && self.config.has_grpc {
-                engine.set("grpc_deps", r#"tonic = "0.11"
-prost = "0.12""#);
+                engine.set(
+                    "grpc_deps",
+                    r#"tonic = "0.11"
+prost = "0.12""#,
+                );
                 engine.set(
                     "build_deps",
                     r#"
@@ -234,13 +233,12 @@ tonic-build = "0.11""#,
             "lib.rs"
         };
 
-        let template_path = if *module == Module::Cli
-            && self.config.project_type == ProjectType::Service
-        {
-            "modules/cli/main_service.rs".to_string()
-        } else {
-            format!("modules/{}/{}", module_name_str, main_file)
-        };
+        let template_path =
+            if *module == Module::Cli && self.config.project_type == ProjectType::Service {
+                "modules/cli/main_service.rs".to_string()
+            } else {
+                format!("modules/{}/{}", module_name_str, main_file)
+            };
 
         if let Some(template) = Templates::get_template(&template_path) {
             let content = self.engine.render(&template);

@@ -1,5 +1,5 @@
 use anyhow::Result;
-use boots_core::{parse_options, ProjectGenerator, ProjectType};
+use boots_core::{ProjectGenerator, ProjectType, parse_options};
 use clap::{Parser, Subcommand};
 use std::env;
 
@@ -8,8 +8,10 @@ use std::env;
 #[command(bin_name = "cargo")]
 #[command(author, version)]
 #[command(about = "Bootstrap modular Rust projects")]
-#[command(long_about = "A CLI tool for bootstrapping modular Rust project structures.\n\n\
-    Creates workspace-based projects with optional modules like API, runtime, persistence, and more.")]
+#[command(
+    long_about = "A CLI tool for bootstrapping modular Rust project structures.\n\n\
+    Creates workspace-based projects with optional modules like API, runtime, persistence, and more."
+)]
 #[command(after_help = "Examples:\n  \
     cargo boots service my-api --options postgres,grpc\n  \
     cargo boots cli my-tool --options client\n  \
@@ -32,8 +34,10 @@ enum CargoCommands {
 #[command(bin_name = "boots")]
 #[command(author, version)]
 #[command(about = "Bootstrap modular Rust projects")]
-#[command(long_about = "A CLI tool for bootstrapping modular Rust project structures.\n\n\
-    Creates workspace-based projects with optional modules like API, runtime, persistence, and more.")]
+#[command(
+    long_about = "A CLI tool for bootstrapping modular Rust project structures.\n\n\
+    Creates workspace-based projects with optional modules like API, runtime, persistence, and more."
+)]
 #[command(after_help = "Examples:\n  \
     boots service my-api --options postgres,grpc\n  \
     boots cli my-tool --options client\n  \
@@ -46,12 +50,14 @@ struct BootsCli {
 #[derive(Subcommand, Clone)]
 enum BootsCommands {
     /// Create a full-stack service project
-    #[command(long_about = "Creates a service project with the following modules:\n  \
+    #[command(
+        long_about = "Creates a service project with the following modules:\n  \
         - core: Business logic and domain types\n  \
         - api: HTTP/gRPC handlers and routes\n  \
         - runtime: Server startup and configuration\n  \
         - cli: Command-line interface\n  \
-        - persistence: Database access layer")]
+        - persistence: Database access layer"
+    )]
     Service {
         /// Project name (e.g., my-api, user-service)
         #[arg(value_name = "NAME")]

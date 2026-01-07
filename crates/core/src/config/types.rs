@@ -36,12 +36,7 @@ impl ProjectConfig {
     pub fn modules(&self) -> Vec<Module> {
         match self.project_type {
             ProjectType::Service => {
-                let mut modules = vec![
-                    Module::Core,
-                    Module::Api,
-                    Module::Runtime,
-                    Module::Cli,
-                ];
+                let mut modules = vec![Module::Core, Module::Api, Module::Runtime, Module::Cli];
                 if self.persistence.is_some() {
                     modules.push(Module::Persistence);
                 }

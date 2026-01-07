@@ -1,7 +1,11 @@
 use super::types::*;
 use crate::error::{BootsError, Result};
 
-pub fn parse_options(project_type: ProjectType, name: &str, options: Option<&str>) -> Result<ProjectConfig> {
+pub fn parse_options(
+    project_type: ProjectType,
+    name: &str,
+    options: Option<&str>,
+) -> Result<ProjectConfig> {
     let mut config = ProjectConfig {
         name: name.to_string(),
         project_type,
@@ -56,7 +60,8 @@ mod tests {
 
     #[test]
     fn test_parse_service_with_multiple_options() {
-        let config = parse_options(ProjectType::Service, "test-svc", Some("postgres,grpc")).unwrap();
+        let config =
+            parse_options(ProjectType::Service, "test-svc", Some("postgres,grpc")).unwrap();
         assert_eq!(config.persistence, Some(PersistenceType::Postgres));
         assert!(config.has_grpc);
     }

@@ -242,8 +242,7 @@ fn test_service_with_grpc() {
     );
 
     // Verify tonic dependency in api Cargo.toml
-    let cargo_content =
-        std::fs::read_to_string(project.join("crates/api/Cargo.toml")).unwrap();
+    let cargo_content = std::fs::read_to_string(project.join("crates/api/Cargo.toml")).unwrap();
     assert!(
         cargo_content.contains("tonic"),
         "tonic dependency missing in api"
