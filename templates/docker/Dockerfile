@@ -9,7 +9,7 @@ FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/target/release/{{project_name}}-cli /usr/local/bin/{{project_name}}
+COPY --from=builder /app/target/release/{{project_name}} /usr/local/bin/{{project_name}}
 
 EXPOSE 8080
 
