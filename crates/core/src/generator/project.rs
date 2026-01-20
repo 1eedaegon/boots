@@ -74,18 +74,14 @@ impl ProjectGenerator {
         // Build authors string: "Name <email>" or empty array
         let authors = if !self.config.author_name.is_empty() || !self.config.author_email.is_empty()
         {
-            let author = if !self.config.author_name.is_empty()
-                && !self.config.author_email.is_empty()
-            {
-                format!(
-                    "{} <{}>",
-                    self.config.author_name, self.config.author_email
-                )
-            } else if !self.config.author_name.is_empty() {
-                self.config.author_name.clone()
-            } else {
-                format!("<{}>", self.config.author_email)
-            };
+            let author =
+                if !self.config.author_name.is_empty() && !self.config.author_email.is_empty() {
+                    format!("{} <{}>", self.config.author_name, self.config.author_email)
+                } else if !self.config.author_name.is_empty() {
+                    self.config.author_name.clone()
+                } else {
+                    format!("<{}>", self.config.author_email)
+                };
             format!("\"{}\"", author)
         } else {
             String::new()
