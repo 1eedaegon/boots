@@ -97,6 +97,27 @@ enum BootsCommands {
         #[arg(value_name = "NAME")]
         name: String,
     },
+
+    /// Create a sample board application with RBAC
+    #[command(
+        long_about = "Creates a full-stack board (게시판) sample project with:\n  \
+        - Role-based access control (Admin, Writer, Reader)\n  \
+        - Posts: Writer/Admin can edit own/all posts\n  \
+        - Comments: Reader/Admin can edit own/all comments\n  \
+        - File upload with image preview\n  \
+        - E2E tests with Playwright\n  \
+        - PostgreSQL + MinIO (S3) + React SPA"
+    )]
+    Sample {
+        /// Project name (e.g., my-board, community)
+        #[arg(value_name = "NAME")]
+        name: String,
+
+        /// Options (use 'sample' to create full board project)
+        #[arg(short, long, value_name = "OPTIONS")]
+        #[arg(help = "Use 'sample' to create full board project (ignores other options)")]
+        options: Option<String>,
+    },
 }
 
 fn main() -> Result<()> {
@@ -123,6 +144,11 @@ fn main() -> Result<()> {
             parse_options(ProjectType::Cli, &name, options.as_deref())?
         }
         BootsCommands::Lib { name } => parse_options(ProjectType::Lib, &name, None)?,
+        BootsCommands::Sample { name, options } => {
+            // Default to 'sample' option if none provided
+            let opts = options.unwrap_or_else(|| "sample".to_string());
+            parse_options(ProjectType::Sample, &name, Some(&opts))?
+        }
     };
 
     let generator = ProjectGenerator::new(config.clone());

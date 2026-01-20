@@ -1,9 +1,22 @@
 .PHONY: setup build run test e2e clean
 
 # ============================================
-# Setup
+# Setup (All-in-one)
 # ============================================
-setup: setup-be setup-fe
+setup:
+	@echo "==> Building backend..."
+	cargo build --all
+	@echo "==> Installing frontend dependencies..."
+	cd frontend && npm install
+	@echo "==> Starting database..."
+	docker compose up -d postgres minio
+	@echo "==> Waiting for database to be ready..."
+	sleep 3
+	@echo "==> Running migrations..."
+	cargo run -p {{project_name}}-cli -- migrate
+	@echo "==> Seeding database..."
+	cargo run -p {{project_name}}-cli -- seed
+	@echo "==> Setup complete! Run 'make run' to start."
 
 setup-be:
 	cargo build --all

@@ -277,3 +277,117 @@ fn test_service_with_postgres_env() {
         "DATABASE_URL missing in .env.example"
     );
 }
+
+// Sample Project Tests
+
+#[test]
+fn test_sample_generation() {
+    let temp = TempProject::new();
+    let result = run_boots_command(
+        &["boots", "sample", "test-board", "--options", "sample"],
+        temp.path(),
+    );
+    assert!(result.success, "Generation failed: {}", result.stderr);
+
+    let project = project_path(&temp, "test-board");
+
+    // Verify basic structure
+    assert!(project.join("crates/core").exists(), "core module missing");
+    assert!(project.join("crates/api").exists(), "api module missing");
+    assert!(
+        project.join("crates/runtime").exists(),
+        "runtime module missing"
+    );
+    assert!(project.join("crates/cli").exists(), "cli module missing");
+    assert!(
+        project.join("crates/persistence").exists(),
+        "persistence module missing"
+    );
+
+    // Verify sample-specific files
+    assert!(
+        project.join("crates/core/src/board").exists(),
+        "board module missing"
+    );
+    assert!(
+        project.join("crates/core/src/board/mod.rs").exists(),
+        "board/mod.rs missing"
+    );
+    assert!(
+        project.join("crates/core/src/board/models.rs").exists(),
+        "board/models.rs missing"
+    );
+    assert!(
+        project.join("crates/core/src/board/permission.rs").exists(),
+        "board/permission.rs missing"
+    );
+
+    // Verify E2E test directory
+    assert!(project.join("e2e").exists(), "e2e directory missing");
+    assert!(
+        project.join("e2e/playwright.config.ts").exists(),
+        "playwright.config.ts missing"
+    );
+    assert!(
+        project.join("e2e/package.json").exists(),
+        "e2e/package.json missing"
+    );
+
+    // Verify docs directory
+    assert!(project.join("docs").exists(), "docs directory missing");
+    assert!(project.join("docs/api.md").exists(), "docs/api.md missing");
+    assert!(
+        project.join("docs/architecture.md").exists(),
+        "docs/architecture.md missing"
+    );
+
+    // Verify frontend (SPA by default)
+    assert!(
+        project.join("frontend").exists(),
+        "frontend directory missing"
+    );
+
+    // Verify docker-compose with MinIO
+    let compose_content = std::fs::read_to_string(project.join("docker-compose.yml")).unwrap();
+    assert!(
+        compose_content.contains("minio"),
+        "minio service missing in docker-compose"
+    );
+}
+
+#[test]
+fn test_sample_default_options() {
+    let temp = TempProject::new();
+    // Without explicit options, sample should still work
+    let result = run_boots_command(&["boots", "sample", "test-board-default"], temp.path());
+    assert!(result.success, "Generation failed: {}", result.stderr);
+
+    let project = project_path(&temp, "test-board-default");
+    assert!(project.join("crates/core").exists(), "core module missing");
+}
+
+#[test]
+fn test_sample_ignores_other_options() {
+    let temp = TempProject::new();
+    // sample option should ignore other options like sqlite
+    let result = run_boots_command(
+        &[
+            "boots",
+            "sample",
+            "test-board-ignore",
+            "--options",
+            "sample,sqlite",
+        ],
+        temp.path(),
+    );
+    assert!(result.success, "Generation failed: {}", result.stderr);
+
+    let project = project_path(&temp, "test-board-ignore");
+
+    // Should use postgres (sample default), not sqlite
+    let compose_content = std::fs::read_to_string(project.join("docker-compose.yml")).unwrap();
+    assert!(
+        compose_content.contains("postgres"),
+        "postgres service missing"
+    );
+}

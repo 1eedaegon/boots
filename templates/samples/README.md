@@ -13,20 +13,18 @@ A full-stack board (게시판) application generated with [boots](https://github
 ### Development Mode (Recommended)
 
 ```bash
-# 1. Install dependencies
+# 1. Setup everything (build, db, migrate, seed)
 make setup
 
-# 2. Start database (Docker)
-make db-up
+# 2. Run development servers
+make run
+```
 
-# 3. Create seed data
-make seed
+Or run backend/frontend separately:
 
-# 4. Run backend server (localhost:8080)
-make run-be
-
-# 5. Run frontend dev server (localhost:3000)
-make run-fe
+```bash
+make run-be   # Backend (localhost:8080)
+make run-fe   # Frontend (localhost:3000)
 ```
 
 ### Docker Compose (Production Mode)
