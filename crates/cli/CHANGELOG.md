@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0](https://github.com/1eedaegon/boots/compare/boots-v0.1.4...boots-v0.2.0) - 2026-01-20
+
+### Added
+
+- add sample board service into template
+- add base application setup for service/cli/libs
+
+### Other
+
+- lint and clippy
+- update readme
+- update license link on readme
+- update readme for others
+
 ## [0.1.3](https://github.com/1eedaegon/boots/compare/boots-v0.1.2...boots-v0.1.3) - 2025-10-02
 
 ### Other
