@@ -10,7 +10,7 @@ Bootstrap a Rust template generator for building modular architectures (monorepo
 ## Installation
 
 ### Using Cargo
-
+  
 ```bash
 cargo install boots
 ```
