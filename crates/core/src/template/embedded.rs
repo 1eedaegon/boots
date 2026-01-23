@@ -1,7 +1,7 @@
 use rust_embed::Embed;
 
 #[derive(Embed)]
-#[folder = "../../templates/"]
+#[folder = "templates/"]
 pub struct Templates;
 
 impl Templates {
