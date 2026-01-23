@@ -9,7 +9,7 @@ use serde_json::json;
 
 // Health & Metrics
 pub async fn health() -> impl IntoResponse {
-    Json(json!({ "status": "healthy" }))
+    Json(json!({ "healthy": true }))
 }
 
 pub async fn metrics() -> &'static str {
