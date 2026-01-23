@@ -12,7 +12,7 @@ repository = "https://github.com/1eedaegon/boots"
 homepage = "https://github.com/1eedaegon/boots"
 documentation = "https://github.com/1eedaegon/boots"
 readme = "README.md"
-keywords = ["bootstrap", "template", "generator", "cargo", "modular-architecture", "monorepo"]
+keywords = ["bootstrap", "template", "generator", "cargo", "monorepo"]
 categories = ["development-tools"]
 rust-version = "1.90"
 
